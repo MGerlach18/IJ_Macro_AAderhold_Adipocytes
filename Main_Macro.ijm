@@ -53,7 +53,7 @@ function preprocessFolder(input) {
 	for (i = 0; i < list.length; i++) {
 		if(File.isDirectory(input + File.separator + list[i]))
 			preprocessFolder(input + File.separator + list[i]);
-		if(endsWith(list[i], ".tif"))
+		if(endsWith(list[i], ".czi"))
 			processFile(input, output, list[i]);
 	}
 }
@@ -63,7 +63,7 @@ function processFolder(input) {
 	for (i = 0; i < list.length; i++) {
 		if(File.isDirectory(input + File.separator + list[i]))
 			processFolder(input + File.separator + list[i]);
-		if(endsWith(list[i], ".tif"))
+		if(endsWith(list[i], ".czi"))
 			measureFile(input, output, list[i]);
 	}
 }
