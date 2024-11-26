@@ -11,6 +11,9 @@
 //Preparing Stage
 run("Bio-Formats Macro Extensions");
 setOption("BlackBackground", true);
+//global variable for results table
+var a=0
+
 run("Set Measurements...", "area area_fraction redirect=None decimal=0");
 print("\\Clear");
 run("Clear Results");
@@ -106,9 +109,10 @@ waitForUser("Manual correction", "Please delete invalid ROIs [DEL] and manually 
 roiManager("Save", output + "\\ROIS\\" + title + ".zip");
 roiManager("Deselect");
 roiManager("Delete");
-}
-}
 close("*");
+}
+}
+
 
 //function opens all ROIS, measures the crossection area and includes them into one .csv-File
 
@@ -118,8 +122,6 @@ title=getTitle();
 
 roiManager("Open", output + "\\ROIS\\" + title + ".zip");
 count=roiManager("count");
-selectWindow("Summary_Total");
-a=getValue("results.count");
 
 roiManager("Measure");
 
@@ -130,6 +132,7 @@ Table.set("ROI #", o+a, o+1);
 Table.set("Area [µm²]", o+a, getResult("Area", o));
 Table.update;
 }
+a=a+count;
 
 close("Results");
 roiManager("Deselect");
