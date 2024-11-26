@@ -79,6 +79,8 @@ if (File.exists(output + "\\ROIS\\" + title  +".zip")) {
 	close("*");
 } else {
 
+run("Split Channels");
+selectWindow("C2-"+title);
 run("RGB Color");
 run("16-bit");
 
@@ -90,9 +92,9 @@ run("Convert to Mask");
 
 run("Remove Outliers...", "radius=3 threshold=50 which=Dark");
 
-run("Analyze Particles...", "size=30.00-Infinity circularity=0.30-1.00 exclude include add");
+run("Analyze Particles...", "size=100.00-Infinity circularity=0.30-1.00 exclude include add");
 
-selectWindow(title);
+selectWindow("C2-"+title);
 close("\\Others");
 
 //Manual check and addition of detected ROIs
@@ -106,25 +108,27 @@ roiManager("Deselect");
 roiManager("Delete");
 }
 }
+close("*");
 
 //function opens all ROIS, measures the crossection area and includes them into one .csv-File
 
-function measureFile(input, output, file) {
+function measureFile(input, output, file) {	
 run("Bio-Formats Importer", "open=[" + input + File.separator + list[i] + "] color_mode=Default view=Hyperstack stack_order=XYCZT series_1");
 title=getTitle();
 
 roiManager("Open", output + "\\ROIS\\" + title + ".zip");
+count=roiManager("count");
 selectWindow("Summary_Total");
 a=getValue("results.count");
 
 roiManager("Measure");
 
-selectWindow("Results");
 selectWindow("Summary_Total");
 for (o = 0; o < count; o++) {
 Table.set("Name", o+a, title);
-Table.set("ROI #", o+a, o);
+Table.set("ROI #", o+a, o+1);
 Table.set("Area [µm²]", o+a, getResult("Area", o));
+Table.update;
 }
 
 close("Results");
