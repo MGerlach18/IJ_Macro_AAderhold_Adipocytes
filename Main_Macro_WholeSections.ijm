@@ -19,7 +19,7 @@ run("Set Measurements...", "area area_fraction redirect=None decimal=0");
 print("\\Clear");
 run("Clear Results");
 close("*");
-setBatchMode(false);
+setBatchMode(true);
 
 if (roiManager("count")>0) {
 roiManager("Deselect");
@@ -30,6 +30,9 @@ File.makeDirectory(output + "\\ROIS");
 File.makeDirectory(output + "\\Results");
 
 //Processing the folder ROI and manual correction
+if (T==true) {
+setBatchMode(false);
+}
 preprocessFolder(input);
 print("All images have been processed, proceeding with final measurement");
 setBatchMode(true);
