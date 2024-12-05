@@ -88,18 +88,24 @@ if (File.exists(output + "\\ROIS\\" + title  +".zip")) {
 
 run("Split Channels");
 selectWindow("C2-"+title);
-run("RGB Color");
-run("16-bit");
-
-run("Top Hat...", "radius=7 light");
-
-setAutoThreshold("Triangle dark");
+run("Duplicate...", " ");
+run("Gaussian Blur...", "sigma=3");
+setAutoThreshold("Default no-reset");
 setOption("BlackBackground", true);
 run("Convert to Mask");
+run("Analyze Particles...", "size=1000-Infinity circularity=0-1.00 include add");
+roiManager("Combine");
+selectWindow("C2-"+title);
+run("Duplicate...", " ");
+run("Restore Selection");
+setAutoThreshold("MinError");
+run("Convert to Mask");
+run("Skeletonize");
+run("Options...", "iterations=5 count=1 black do=Close");
+run("Options...", "iterations=1 count=1 black do=Dilate");
 
-run("Remove Outliers...", "radius=3 threshold=50 which=Dark");
-
-run("Analyze Particles...", "size=100.00-Infinity circularity=0.30-1.00 exclude include add");
+run("Invert");
+run("Analyze Particles...", "size=100-Infinity circularity=0.10-1.00 add");
 
 selectWindow("C2-"+title);
 close("\\Others");
